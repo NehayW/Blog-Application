@@ -1,0 +1,309 @@
+{% extends "base.html"%}
+{% load static %}
+{% block content %}
+
+<div class="container justify-content-between">
+    <div class="row ">
+        <!-- Left Bar -->
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3 mt-4 ">
+            <div class="row">
+                <div class="col-12 p-3 mb-4" style="border-radius: 5px; background-color: white;">
+                    <h6 class="mb-4" style="text-decoration:underline; padding-bottom: 2px;">
+                        Shortcuts
+                    </h6>
+                    <ul class="shortcut">
+                        <li class="mb-4"><a href="{% url 'homepage' %}"> <i class="bi bi-journal-check "></i> News Feed</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-mouse"></i> Inbox</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-file-earmark-break"></i> My Pages</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-person"></i> Friends</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-image"></i> Images</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-camera-reels"></i> Videos</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-chat-dots"></i> Messages</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-bell"></i> Notifications</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-graph-up-arrow"></i> People Nearby</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-bar-chart-line-fill"></i> Insights</a></li>
+                        {% if request.user.is_authenticated %}
+                        <li class="mb-4"><a href="{% url 'change-password' %}"> <i class="fa fa-sign-out" aria-hidden="true"></i></i>Change Password</a></li>
+                        <li class="mb-4"><a href="{% url 'logout' %}"> <i class="fa fa-sign-out" aria-hidden="true"></i></i> Logout</a></li>
+                        {% else %}
+                        <li class="mb-4"><a href="{% url 'login' %}"> <i class="fa fa-sign-out" aria-hidden="true"></i></i> Login</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-12 p-3 mb-4" style="border-radius: 5px; background-color: white; height: 200px;">
+                    <h5> Recent Activity</h5>
+                </div>
+                <div class="col-12 p-3 mb-4 sticky"
+                    style="border-radius: 5px; background-color: white; height: 200px; position: sticky; top: 0px;">
+                    <h5> Recent Activity 2</h5>
+                </div>
+            </div>
+        </div>
+        <!-- Middel bar -->
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6 mt-4">
+            <div class="container justify-content-between">
+                <div class="row ">
+                    <div class="col-12 mb-3 ml-2 mr-2 single-post">
+                        <div class="p-4">
+                            <div class="mt-2">
+                                <h5>
+                                    Registration Form
+                                </h5>
+                            </div>
+                            <form id="registration-form" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group mb-3">
+                                    <label for="email">Email: </label>
+                                    <input name="email" class="form-control" type="email" id="email">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="first_name"> First Name: </label>
+                                    <input type="text" name="first_name" class="form-control" id="first_name" required>
+                                </div>
+                                <div class="from-group mb-3">
+                                    <label for="last_name"> Last Name:</label>
+                                    <input type="text" name="last_name" class="form-control" id="last_name">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="profile_image"> Profile Image:</label>
+                                    <input type="file" name="profile_image" id="profile_image" class="form-control">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="password1"> Password:</label>
+                                    <input type="password" name="password1" class="form-control" id="password1">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="password2"> Re-Enter Password :</label>
+                                    <input type="password" name="password2" class="form-control" id="password2">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="submit" value="Submit">
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id="otp-form" class="modal row">
+                            <div class="col-10 col-md-6 col-lg-4 card ">
+                                <div class="mt-2">
+                                    <h5>
+                                        Submit OTP
+                                    </h5>
+                                </div>
+                                <form id="otp" action="" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-group mb-3">
+                                        <label for="otp">OTP</label>
+                                        <input required pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==6) return false;" type="number" id="user_otp" name="otp"
+                                            class="form-control">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col from-group mb-3">
+                                            <input id="close" type="button" value="Close" class="form-control">
+                                        </div>
+                                        <div class="col from-group mb-3">
+                                            <input type="submit" value="submit" class="form-control">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Right Side bar -->
+        <div class=" col-12 col-sm-12 col-md-6 col-lg-3 mt-4">
+            <div class="row">
+                <div class="col-12 mb-4 p-3" style="border-radius: 5px; background-color: white;">
+                    <h5 class="mb-4" style="text-decoration:underline; padding-bottom: 2px;">
+                        Your Page
+                    </h5>
+                    <div class="row">
+                        <div class="mt-3 mb-3 col">
+                            <img style="border-radius: 50%;" height="50" width="50"
+                                src="{% static 'imges/photo-1425913397330-cf8af2ff40a1.jpeg' %}" alt="">
+                            <span style="position: absolute;">
+                                <ul style="
+                                padding-left: 19px;
+                                margin-top: -10px;">
+                                    <li><a href=""><b>Your Page</b></a></li>
+                                    <li> Messages</li>
+                                    <li> Notifications</li>
+                                </ul>
+                            </span>
+                            <div class="col mt-5 mb-3">
+                                <div class="row mx-0">
+                                    <div style="text-align: center; background-color: lightblue; border-radius: 5px;"
+                                        class="col"><a href="">LIKES</a></div>
+                                    <div style="text-align: center;" class="col"><a href="">VIEWS</a></div>
+                                </div>
+                            </div>
+                            <div class="col mt-3 mb-3">
+                                <h5 class="text-center">
+                                    <i class="bi bi-eye"></i> 884
+                                </h5>
+                                <p class="text-center">
+                                    35 New Views This Week
+                                </p>
+                            </div>
+                            <div class="col mt-3 mb-3">
+                                <h5 class="text-center">
+                                    <i class="bi bi-heart"></i> 440
+                                </h5>
+                                <p class="text-center">
+                                    35 New Like This Week
+                                </p>
+                            </div>
+                            <div class="col mb-3 p-3">
+                                <a href="#"><img style="border: 2px solid white; border-radius:50%; margin-left: -10px;"
+                                        height="40" width="40"
+                                        src="{% static 'imges/photo-1425913397330-cf8af2ff40a1.jpeg' %}" alt=""></a>
+                                <a href="#"><img style="border: 2px solid white; border-radius:50%; margin-left: -10px;"
+                                        height="40" width="40"
+                                        src="{% static 'imges/photo-1425913397330-cf8af2ff40a1.jpeg' %}" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-4 p-3"
+                    style="border-radius: 5px; height: 500px; background-color: white; position: sticky; top: 100px;">
+                    <h5 class="mb-4" style="text-decoration:underline; padding-bottom: 2px;">
+                        Friends
+                    </h5>
+                    <div>
+                        <input type="text" name="" id="" placeholder="Search Contects">
+                    </div>
+                    <div class="pt-3">
+                        <img style="border-radius: 50%;" height="50" width="50"
+                            src="{% static 'imges/LinkedIn-Profile-Picture-Example-Madeline-Mann.jpeg' %}" alt="">
+                        <span style="position: absolute;">
+                            <ul style="list-style-type: none; list-style-type: none;
+                            padding-left: 19px;
+                           ">
+                                <li>
+                                    <b>
+                                        Bucky Barnes
+                                    </b>
+                                </li>
+                                <li>
+                                    demo1@mailinator.com
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#otp-form").hide()
+        $("#close").click(function () {
+            $("#otp-form").hide();
+        });
+
+        $("#otp").submit(function (e) {
+            e.preventDefault();
+            // var key = $("#key").val();
+            // var user_otp = $("#user_otp").val();
+            // var first_name = $("[name=first_name]").val();
+            // var last_name = $("[name=last_name]").val();
+            // var email = $("[name=email]").val();
+            // var image = $("[name=profile_image]").val();
+            // var password1 = $("[name=password1]").val();
+            var serializedata = $('#registration-form')[0];
+            var formdata = new FormData(serializedata);
+            // formdata.append('fileSize', sizeConverter($('#profile_image')[0].files[0].size/1024));
+            // serializedata.push({name:'profile_image', value: $('#profile_image')[0].files[0]});
+            // formdata = new FormData($('#registration-form').get(0));
+            formdata.append('profile_image', $('#profile_image')[0].files[0]); 
+            formdata.append('key', $("#key").val())
+            formdata.append('otp', $("#user_otp").val())
+            // formdata.append('first_name', $("[name=first_name]").val())
+            // formdata.append('last_name', $("[name=last_name]").val())
+            // formdata.append('email', $("[name=email]").val())
+            // formdata.append('password', $("[name=password1]").val())               
+            // var email = $("[name=email]").val()
+            // var first_name = $("[name=first_name]").val()
+            // var last_name = $("[name=last_name]").val()
+            // var image = $("[name=image]").val()
+            // var password1 = $("[name=password1]").val()
+            // var password2 = $("[name=password2]").val()
+            // serializedata.append("key", key)
+            // serializedata.push({"key": key});
+            // console.log(formdata)
+            // serializedata.push({name: 'key', value: key})
+            // serializedata.push({name:"otp", value: user_otp})
+            // console.log(serializedata)
+            console.log(formdata)
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'verify-otp' %}",
+                data: formdata,
+                contentType: false,
+                processData:false,
+                // enctype: 'multipart/form-data',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    Swal.fire(
+                        '',
+                        data.messages,
+                        'success'
+                    )
+                    console.log(data)
+                    $("#otp-form").hide()
+                },
+                error: function (data) {
+                    Swal.fire(
+                        '',
+                        data.messages,
+                        'error'
+                    )
+                }
+            });
+        });
+        $('#registration-form').submit(function (e) {
+            e.preventDefault();
+            serializedata = $('#registration-form').serialize();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'registration' %}",
+                data: serializedata,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    $("#otp").append(`<input id="key" type="hidden" name="key" value="${data.key}">`)
+                    $("#otp-form").show()
+                    $('#registration-form')
+                },
+                error: function (data) {
+                    console.log(data)
+                    var errors = data.responseJSON.erros
+                    error = Object.keys(errors)
+                    $(".error").remove()
+                    for (var i = 0; i < error.length; i++) {
+                        key = error[i]
+                        console.log(error.length)
+                        error1 = errors[key]
+                        if (key == "email") {
+                            $(`<p class="error" >${error1}<p>`).insertAfter($("[name=email]"))
+                        }
+                        if (key == "password1") {
+                            $(`<p class="error" >${error1}<p>`).insertAfter($("[name=password1]"))
+                        }
+                        if (key == "password2") {
+                            $(`<p class="error" >${error1}<p>`).insertAfter($("[name=password2]"))
+                        }
+                    }
+                }
+            });
+        });
+    });
+        
+</script>
+{% endblock content %}

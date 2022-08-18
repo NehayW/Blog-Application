@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".center").hide();
+        });
+    $(document).ready(function(){
+        $(".close").click(function(){
+            $(".center").hide();
+        });
+        });
+</script>
+ <!-- Login Area Start -->
+    <section class="vh-100" >
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <div >
+          <div class="row g-0">
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
+                alt="login form"
+                class="img-fluid" style="border-radius: 1rem 0 0 1rem;"
+              />
+            </div>
+            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+              <div class="card-body p-4 p-lg-5 text-black">
+
+                <form method="POST">
+                    {% csrf_token %}
+                  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account</h5>
+
+                  <div class="form-outline mb-4">
+                    <input type="email" id="id_username" class="form-control form-control-lg" name="username" required />
+                    <label class="form-label" for="id_username">Email address</label>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input type="password" id="id_password" class="form-control form-control-lg" name="password" required />
+                    <label class="form-label" for="id_password">Password</label>
+                  </div>
+                    <span>
+                        {% if form.errors %}
+                            <p>Username or Password not correct</p>
+                        {% endif %}
+                    </span> 
+                  <div class="pt-1 mb-4">
+                    <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
+                  </div>
+                  <p class="mb-2 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="{% url 'registration' %}" style="color: #393f81;">Register here</a></p>
+                  <a style="color: red;" href="#" class="reset-form" > Reset password?</a>
+                </form>
+                <div class="center">
+                    
+                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color:   hsl(211, 100%, 97%); width:410px; padding: 20px; box-shadow: 0 0 8px rgba(0,0,0,0.4) ">
+                     <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>  
+                <div style="font-size: 25px; font-weight: 400;"> Reset your password?</div>
+                <div style="font-size: 15px; font-weight: 200;" > Tell us your email address we will send reset password link on your mail <address></address> </div>
+                <form action="{% url 'forgot-password' %}" method="post">
+                    {% csrf_token %}
+
+                    <div style=" width: 100%; ">
+                        <label for="id_email"> Email Address </label>
+                        <input id="id_email" style="height: 35px; width:100%" type="email" name="email" required>
+                    </div>
+
+                    <button class="btn btn-primary mt-3" style="margin-top: 35px; width:100%;" type="submit"> Send Link</button>
+                </form>
+                </div>
+                   
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+    <script type="text/javascript">
+    
+    {% if messages %}
+        {% for message in messages %}
+        Swal.fire(
+        '',
+        '{{ message }}',
+        '{{ message.tags }}'
+        )
+        {% endfor %}
+
+    {% endif %}
+
+    </script> 
+
+<script>
+$(document).ready(function(){
+  $(".reset-form").click(function(){
+    $(".center").show();
+  });
+});
+</script>
+{% endblock content %}
+
+

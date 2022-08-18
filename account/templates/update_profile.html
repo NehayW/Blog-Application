@@ -1,0 +1,207 @@
+{% extends "base.html"%}
+{% load static %}
+{% block content %}
+
+<style type="text/css">
+    .hide-scroll{
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.hide-scroll::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
+</style>
+
+<div class="container-fluid justify-content-between">
+    <div class="row ">
+        <!-- Left Bar -->
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3 mt-4 ">
+            <div class="row">
+                <div class="col-12 p-3 mb-4" style="border-radius: 5px; background-color: white;">
+                    <h6 class="mb-4" style="text-decoration:underline; padding-bottom: 2px;">
+                        Shortcuts
+                    </h6>
+                    <ul class="shortcut">
+                        <li class="mb-4"><a href="{% url 'homepage' %}"> <i class="bi bi-journal-check "></i> News Feed</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-mouse"></i> Inbox</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-file-earmark-break"></i> My Pages</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-person"></i> Friends</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-image"></i> Images</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-camera-reels"></i> Videos</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-chat-dots"></i> Messages</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-bell"></i> Notifications</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-graph-up-arrow"></i> People Nearby</a></li>
+                        <li class="mb-4"><a href="#"> <i class="bi bi-bar-chart-line-fill"></i> Insights</a></li>
+                        <li class="mb-4"><a href="#"> <i class="fa fa-sign-out" aria-hidden="true"></i></i> Logout</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-12 p-3 mb-4" style="border-radius: 5px; background-color: white; height: 200px;">
+                    <h5> Recent Activity</h5>
+                </div>
+                <div class="col-12 p-3 mb-4 sticky"
+                    style="border-radius: 5px; background-color: white; height: 200px; position: sticky; top: 0px;">
+                    <h5> Recent Activity 2</h5>
+                </div>
+            </div>
+        </div>
+        <!-- Middel bar -->
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6 mt-4">
+            <div class="container justify-content-between">
+                <div class="row ">
+                    <div class="col-12 mb-3 ml-2 mr-2 single-post">
+                        <div class="p-4">
+                            <div class="mt-2">
+                                <h5>
+                                    Update  Profile
+                                </h5>
+                            </div>
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group mb-3">
+                                    <label for="first_name"> First Name: </label>
+                                    <input type="text" name="first_name" class="form-control" id="first_name">
+                                </div>
+                                <div class="from-group mb-3">
+                                    <label for="last_name"> Last Name:</label>
+                                    <input type="text" name="last_name" class="form-control" id="last_name">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="profile_image"> Profile Image:</label>
+                                    <input type="file" name="profile_image" name="profile_image" id="profile_image" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="submit" value="Submit">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Right Side bar -->
+        <div class=" col-12 col-sm-12 col-md-6 col-lg-3 mt-4">
+            <div class="row">
+                <div class="col-12 mb-4 p-3" style="border-radius: 5px; background-color: white;">
+                    <h5 class="mb-4" style="text-decoration:underline; padding-bottom: 2px;">
+                        Your Page
+                    </h5>
+                    <div class="row">
+                        <div class="mt-3 mb-3 col">
+                            <img style="border-radius: 50%;" height="50" width="50"
+                                src="{{ request.user.profile_image.url }}" alt="">
+                            <span style="position: absolute;">
+                                <ul style="
+                                padding-left: 19px;
+                                margin-top: -10px;">
+                                    <li><a href="{% url 'mypost' %}"><b style="color:#499cdd; ;">Your Page</b></a></li>
+                                    <li style="font-size: 15px; color: #999;"> Messages</li>
+                                    <li style="font-size: 15px; color: #999;"> Notifications</li>
+                                </ul>
+                            </span>
+                            <div class="col mt-5 mb-3">
+                                <div class="row mx-0">
+                                    <div style="text-align: center; background-color: #499cdd; color: white; border-radius: 5px;" class="col"><a href="">LIKES</a></div>
+                                    <div style="text-align: center; background-color: #eeeeee; color: #797b79;" class="col"><a href="">VIEWS</a></div>
+                                </div>
+                            </div>
+                            <div class="col mt-3 mb-3">
+                                <h5 class="text-center">
+                                    <i class="bi bi-eye"></i>    884
+                                </h5>                       
+                                <p class="text-center">
+                                    35 New Views This Week 
+                                </p>
+                            </div>
+                            <div class="col mt-3 mb-3">
+                                <h5 class="text-center">
+                                    <i class="bi bi-heart"></i>    440
+                                </h5>                       
+                                <p class="text-center">
+                                    35 New Like This Week 
+                                </p>
+                            </div>
+                            <div class="col mb-3 p-3">
+                                <a href="#"><img style="border: 2px solid white; border-radius:50%; margin-left: -10px;"
+                                        height="40" width="40"
+                                        src="{% static 'imges/photo-1425913397330-cf8af2ff40a1.jpeg' %}" alt=""></a>
+                                <a href="#"><img style="border: 2px solid white; border-radius:50%; margin-left: -10px;"
+                                        height="40" width="40"
+                                        src="{% static 'imges/photo-1425913397330-cf8af2ff40a1.jpeg' %}" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-4 p-3 hide-scroll" style="border-radius: 5px; height: 500px; overflow: scroll; background-color: white; position: sticky; top:50px;">
+                    <h5 class="mb-4" style="text-decoration:underline; padding-bottom: 2px;">
+                        Followers
+                    </h5>
+                    {% for follower in user.follower.all %}
+                    <div class="pt-3" >
+                        <img style="border-radius: 50%;" height="50" width="50" src="{{ follower.profile_image.url }}" alt="">
+                        <span style="position: absolute;">
+                            <ul style="list-style-type: none; list-style-type: none;
+                            padding-left: 19px;
+                           ">
+                           <li>
+                                <b style="color: #499cdd;">
+                                   <a href="{% url 'user-info' pk=follower.id %}">
+                                        {{ follower.first_name | capfirst }}
+                                    </a>
+                                </b>
+                           </li>
+                           <li>
+                                {{ follower.email }}
+                           </li>
+                            </ul>
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="col-12 mb-4 p-3 hide-scroll" style="border-radius: 5px; height: 500px; overflow: scroll; background-color: white; position: sticky; top: 100px;">
+                    <h5 class="mb-4" style="text-decoration:underline; padding-bottom: 2px;">
+                        Following   
+                    </h5>
+                    {% for following in user.following.all %}
+                    <div class="pt-3" >
+                        <img style="border-radius: 50%;" height="50" width="50" src="{{ following.profile_image.url }}" alt="">
+                        <span style="position: absolute;">
+                            <ul style="list-style-type: none; list-style-type: none;
+                            padding-left: 19px;
+                           ">
+                           <li> <a style="color: #499cdd;" href="{% url 'user-info' pk=following.id %}">
+                                    <b>
+                                    {{ following.first_name | capfirst }}
+                                    </b>
+                                </a>
+                           </li>
+                           <li>
+                                {{ following.email }}
+                           </li>
+                            </ul>
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+        {% if messages %}
+        {% for message in messages %}
+        Swal.fire(
+        '',
+        '{{ message }}',
+        '{{ message.tags }}'
+        )
+        {% endfor %}
+
+    {% endif %}
+</script>
+{% endblock content %}

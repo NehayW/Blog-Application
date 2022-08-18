@@ -1,0 +1,450 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block content %}
+<style type="text/css">
+    .hide-scroll{
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.hide-scroll::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
+</style>
+    <div class="container-fluid" style="position: relative;"  >
+        <div style=" height:250px; background-image: url({% static 'imges/photo-1425913397330-cf8af2ff40a1.jpeg' %});" class="row">
+        </div>
+        <div style="position:absolute; left:50px; bottom:-20px;" >
+            <img style="border: 5px solid white; border-radius:50%;" height="100" width="100" src="{{ request.user.profile_image.url }}" alt="">
+        </div>
+    </div>  
+    <div style="position:relative;" class="container justify-content-between">
+        <div class="row ">
+            <!-- Left Bar -->
+            <div class="col-12 col-sm-12 col-md-6 col-lg-3 mt-4 " >
+                <div class="row">
+                    <div class="col-12 p-3 mb-4" style="border-radius: 5px; background-color: white;">
+                        <h6 class="mb-4" style="text-decoration:underline; padding-bottom: 2px;">
+                            Shortcuts
+                        </h6>
+                        <ul class="shortcut">
+                            <li class="mb-4"><a href="{% url 'homepage' %}"> <i class="bi bi-journal-check "></i> News Feed</a></li>
+                            <li class="mb-4"><a href="#"> <i class="bi bi-mouse"></i> Inbox</a></li>
+                            <li class="mb-4"><a href="#"> <i class="bi bi-file-earmark-break"></i> My Pages</a></li>
+                            <li class="mb-4"><a href="#"> <i class="bi bi-person"></i> Friends</a></li>
+                            <li class="mb-4"><a href="#"> <i class="bi bi-image"></i> Images</a></li>
+                            <li class="mb-4"><a href="#"> <i class="bi bi-camera-reels"></i> Videos</a></li>
+                            <li class="mb-4"><a href="#"> <i class="bi bi-chat-dots"></i> Messages</a></li>
+                            <li class="mb-4"><a href="#"> <i class="bi bi-bell"></i> Notifications</a></li>
+                            <li class="mb-4"><a href="#"> <i  class="bi bi-graph-up-arrow"></i> People Nearby</a></li>
+                            <li class="mb-4"><a href="#"> <i class="bi bi-bar-chart-line-fill"></i> Insights</a></li>
+                            {% if request.user.is_authenticated %}
+                            <li class="mb-4"><a href="{% url 'change-password' %}"> <i class="fa fa-sign-out" aria-hidden="true"></i></i>Change Password</a></li>
+                            <li class="mb-4"><a href="{% url 'logout' %}"> <i class="fa fa-sign-out" aria-hidden="true"></i></i> Logout</a></li>
+                            {% else %}
+                            <li class="mb-4"><a href="{% url 'login' %}"> <i class="fa fa-sign-out" aria-hidden="true"></i></i> Login</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-12 p-3 mb-4" style="border-radius: 5px; background-color: white; height: 200px;">
+                        <h5> Recent Activity</h5>
+                    </div>
+                    <div class="col-12 p-3 mb-4 sticky" style="border-radius: 5px; background-color: white; height: 200px; position: sticky; top: 0px;">
+                        <h5> Recent Activity 2</h5>
+                    </div>
+                </div>
+            </div>
+            <!-- Middel bar -->
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 mt-4">
+                <div class="container justify-content-between">
+                    <div class="row  hide-scroll" style="height: 1534px;">
+                        <div class="col-12 mb-3 ml-2 mr-2 " style=" border-radius: 5px; width: 96%; margin-left: 12px; background-color: white;">
+                            <div class="p-4">
+                                <div class="row">
+                                    <div class="col-6 col-lg-2 col-md-6 mt-2">                       
+                                        <img style="border-radius: 50%;" height="60" width="60" src="{{ request.user.profile_image.url }}" alt="">     
+                                    </div>
+                                    <div class="col-10 col-lg-10 pb-2 mt-2 postarea">
+                                        <form action="{% url 'blogpost' %}" id="postform" method="POST">
+                                            {% csrf_token %}
+                                            <textarea placeholder="Write something here" name="description" id="" style=" border: none; outline: none; resize: none; width: 100%; min-height: 88px;" 
+                                            ></textarea>
+                                            <input type="hidden" name="pk" value="{{ update.id }}">
+                                            <input type="submit" id="submitdata" value="Post" style="float: right;">
+                                            <label style="float: right; margin-right: 15px;" for="id_post_image">
+                                                <input name="post_image" id="id_post_image" style=" display: none" type="file" style="float: right;">
+                                                <i class="bi bi-image" style="float: right;"></i>
+                                            </label>
+                                        </form>
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>
+                        {% for post in posts %}
+                        <div class="col-12 mb-3 ml-2 mr-2 mt-2 single-post">
+                            <div class="p-4">
+                                <div class="single-post-image" style="display: flex;">    
+                                    <img height="50" width="50" src="{{ post.user.profile_image.url }}" alt="">
+                                    <span >
+                                        <ul style="margin-left: 13px;">
+                                            <li style="font-size: 15px;">
+                                                <b style="color: #499cdd;"><a href="{% url 'user-info' pk=post.user.id %}"> {{ post.user.email }}</b></a>
+                                            </li>
+                                            <li style="color:darkgrey; font-size: 12px;">
+                                                Published {{ post.created_at }}
+                                            </li>
+                                        </ul>
+                                    </span>
+                                    <div style="float: right;" >
+                                        <a href="{% url 'delete-post' pk=post.id %}">Delete</a>
+                                    </div>
+                                </div>
+                                <div class="mt-3 mb-3">
+                                    {% if post.post_image %}
+                                    <img height="300" width="100%" src="{{ post.post_image.url }}" alt="">
+                                    {% else %}
+                                    <img height="300" width="100%" src="{% static 'imges/missing.avif' %}" alt="">
+                                    {% endif %}
+                                </div>
+                                <div class="mt-3 ">
+                                    <ul>
+                                        <li style="display: inline;"> <i class="bi bi-eye"> <sup style="color:darkgrey; font-size: 11px;">1.2K</sup></i></li>
+                                        <li class="commentcount {{ post.id }}" style="display: inline; margin-left: 20px;"> <i class="bi bi-chat-text"></i>
+                                        <sup style="color:darkgrey; font-size: 11px; margin-left: 5px;">{{ post.post.all.count}}</sup></li>
+                                        <li class="likepost {{ post.id }}" style="display: inline;  margin-left: 20px; color: green;"> <a href="#"><i class="bi bi-heart"></i> </a><sup style="font-size: 11px; margin-left: 5px;">{{ post.like.all.count }}</sup></li>
+                                        <li class="dislikepost {{ post.id }}"  style="display: inline;  margin-left: 20px;color: red;"><a href="#"><i class="bi bi-heart-pulse"></i></a><sup style="font-size: 11px; margin-left: 5px;">{{ post.dislike.all.count }}</sup> </li>
+                                        <li style="display: inline;  margin-left: 20px;">
+                                        <i class="bi bi-share-fill"></i> </li>
+                                    </ul>
+                                </div>
+                                <div class="mt-3 " style="font-size: 15px; color:darkgrey">
+                                    {{ post.description }}
+                                </div>
+                                <div id="comments{{ post.id }}" class="hide-scroll" style="max-height:200px; ">
+                                    {% for comment in post.post.all %}
+                                    <div class="mt-3 row mx-0 ">
+                                        <div class="col-2 mt-2">
+                                            <img style="border-radius: 50%;" height="40" width="40" src="{{ comment.user.profile_image.url }}" alt="">
+                                        </div>
+                                        <div class="comment-div position-relative col mt-2" style="border: 1px solid darkgrey;">
+                                            <span style="font-size: 14px;"><b> {{ comment.user.first_name | capfirst }} </span></b> <span style="color:#999; font-size:14px;" > {% modifaidtime comment.commented_at %} </span>
+                                            <span style="color:#999; font-size:14px;">ago</span>
+                                            <p style="color:#999; font-size:14px;" class="m-0">
+                                                {{ comment.comment }}
+                                            </p>
+                                            <a class="show">
+                                                Reply
+                                            </a>
+                                        </div>
+                                        <div class="reply hide-scroll" id="{{ comment.id }}"  style="max-height:150px; ">
+                                            <div class="mt-3 row ps-5">
+                                                <div class="row mx-0 p-0" >
+                                                    <div class="col-2 col-lg-2 col-md-6 mt-2">
+                                                        {% if request.user.profile_image %}                 
+                                                        <img style="border-radius: 50%;" height="40" width="40" src="{{ request.user.profile_image.url }}" alt="">
+                                                        {% else %}
+                                                        <img style="border-radius: 50%;" height="40" width="40" src="{% static 'imges/guest-user.jpg' %}" alt="">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-12 col-lg-10 col-md-12 mt-3 p-0">
+                                                        <form class="replycomment"  method="POST">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="pk" value="{{ comment.id }}">
+                                                            <input required style="width: 100%; "placeholder="Post your Reply" name="reply" type="text" >
+                                                            <div class="mt-1" >
+                                                                <input type="submit" value="Reply">
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                {% for reply in comment.re_comment.all %}
+                                                <div class="col-2 mt-2">
+                                                    <img style="border-radius: 50%;" height="40" width="40" src="{{ reply.user.profile_image.url }}" alt="">
+                                                </div>
+                                                <div class="comment-div position-relative col-10 mt-2" style="border: 1px solid darkgrey;">
+                                                    <span > {{ reply.user.first_name | capfirst }} </span> <span style="color:#999; font-size:14px;"> {% modifaidtime reply.commented_at %} </span> 
+                                                    <span style="color:#999; font-size:14px;" >ago</span>
+                                                    </i>
+                                                    <p style="color:#999; font-size:14px" class="mt-2">
+                                                        {{ reply.reply }}
+                                                    </p>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="row mx-0" >
+                                    <div class="col-2 col-lg-2 col-md-6 mt-2">
+                                        {% if request.user.profile_image %}                 
+                                        <img style="border-radius: 50%;" height="40" width="40" src="{{ request.user.profile_image.url }}" alt="">
+                                        {% else %}
+                                        <img style="border-radius: 50%;" height="40" width="40" src="{% static 'imges/guest-user.jpg' %}" alt="">
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12 col-lg-10 col-md-12 mt-3 p-0">
+                                        <form class="commentpost" action="{% url 'postcomment' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="pk" value="{{ post.id }}">
+                                            <input required style="width: 100%; "placeholder="Post your commnet" name="comment" type="text" >
+                                            <div class="mt-1" >
+                                                <input type="submit" value="Comment">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- Right Side bar -->
+            <div class=" col-12 col-sm-12 col-md-6 col-lg-3 mt-4">
+                <div class="row">
+                    <div class="col-12 mb-4 p-3" style="border-radius: 5px; background-color: white;">
+                        <h5 class="mb-4" style="text-decoration:underline; padding-bottom: 2px;">
+                            Your Page
+                        </h5>
+                        <div class="row">
+                            <div class="mt-3 mb-3 col">
+                                {% if request.user.profile_image %}                 
+                                <img style="border-radius: 50%;" height="50" width="50" src="{{ request.user.profile_image.url }}" alt="">
+                                {% else %}
+                                <img style="border-radius: 50%;" height="50" width="50" src="{% static 'imges/guest-user.jpg' %}" alt="">
+                                {% endif %}
+                                <span style="position: absolute;">
+                                    <ul style="
+                                    padding-left: 19px;
+                                    margin-top: -10px;">
+                                        <li><a href="{% url 'update-profile' %}"><b style="color: #499cdd;" >Edit Profile</b></a></li>
+                                        <li style="font-size: 15px; color: #999;"> Messages</li>
+                                        <li style="font-size: 15px; color: #999;"> Notifications</li>
+                                    </ul>
+                                </span>
+                                <div class="col mt-5 mb-3">
+                                    <div class="row mx-0">
+                                        <div style="text-align: center; background-color: #499cdd; color: white; border-radius: 5px;" class="col"><a href="">LIKES</a></div>
+                                        <div style="text-align: center; background-color: #eeeeee; color: #797b79;" class="col"><a href="">VIEWS</a></div>
+                                    </div>
+                                </div>
+                                <div class="col mt-3 mb-3">
+                                    <h5 class="text-center">
+                                        <i class="bi bi-eye"></i>    884
+                                    </h5>                       
+                                    <p class="text-center">
+                                        35 New Views This Week 
+                                    </p>
+                                </div>
+                                <div class="col mt-3 mb-3">
+                                    <h5 class="text-center">
+                                        <i class="bi bi-heart"></i>    440
+                                    </h5>                       
+                                    <p class="text-center">
+                                        35 New Like This Week 
+                                    </p>
+                                </div>
+                                <div class="col mb-3 p-3">
+                                    <a href="#"><img style="border: 2px solid white; border-radius:50%; margin-left: -10px;" height="40" width="40"  src="{% static 'imges/photo-1425913397330-cf8af2ff40a1.jpeg' %}" alt=""></a>
+                                    <a href="#"><img style="border: 2px solid white; border-radius:50%; margin-left: -10px;" height="40" width="40" src="{% static 'imges/photo-1425913397330-cf8af2ff40a1.jpeg' %}" alt=""></a>                       
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-4 p-3 hide-scroll" style="border-radius: 5px; height: 500px; overflow: scroll; background-color: white; position: sticky; top:50px;">
+                        <h5 class="mb-4" style="text-decoration:underline; padding-bottom: 2px;">
+                            Followers
+                        </h5>
+                        {% for follower in request.user.follower.all %}
+                        <div class="pt-3" >
+                            <img style="border-radius: 50%;" height="50" width="50" src="{{ follower.profile_image.url }}" alt="">
+                            <span style="position: absolute;">
+                                <ul style="list-style-type: none; list-style-type: none;
+                                padding-left: 19px;
+                               ">
+                               <li>
+                                    <b style="color: #499cdd;">
+                                       <a href="{% url 'user-info' pk=follower.id %}">
+                                            {{ follower.first_name | capfirst }}
+                                        </a>
+                                    </b>
+                               </li>
+                               <li>
+                                    {{ follower.email }}
+                               </li>
+                                </ul>
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-12 mb-4 p-3 hide-scroll" style="border-radius: 5px; height: 500px; overflow: scroll; background-color: white; position: sticky; top: 100px;">
+                        <h5 class="mb-4" style="text-decoration:underline; padding-bottom: 2px;">
+                            Following   
+                        </h5>
+                        {% for following in request.user.following.all %}
+                        <div class="pt-3" >
+                            <img style="border-radius: 50%;" height="50" width="50" src="{{ following.profile_image.url }}" alt="">
+                            <span style="position: absolute;">
+                                <ul style="list-style-type: none; list-style-type: none;
+                                padding-left: 19px;
+                               ">
+                               <li> <a style="color: #499cdd;" href="{% url 'user-info' pk=following.id %}">
+                                        <b>
+                                        {{ following.first_name | capfirst }}
+                                        </b>
+                                    </a>
+                               </li>
+                               <li>
+                                    {{ following.email }}
+                               </li>
+                                </ul>
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function(){ 
+            $(".likepost").click(function(e){
+                e.preventDefault()
+                var post_id = ($(this).attr("class").split(" ")[1]);
+                id = parseInt(post_id);
+                $.ajax({
+                    type: 'GET',
+                    url: "/likepost/"+id+"/",
+                    success: function(data){
+                        var selector = ".likepost"+"."+id
+                        var like = data['like']
+                        var dislike = data['dislike']
+                        $(selector).children('sup').text(like)
+                        $(selector).next().children('sup').text(dislike)
+                    },
+                    error: function(data){
+                        console.log("error")
+                    }
+                });
+            });
+            $(".dislikepost").click(function(e){
+                e.preventDefault()
+                var post_id = ($(this).attr("class").split(" ")[1]);
+                id = parseInt(post_id);
+                $.ajax({
+                    type: 'GET',
+                    url: "/dislikepost/"+id+"/",
+                    success: function(data){
+                        var selector = ".dislikepost"+"."+id
+                        var dislike = data['dislike']
+                        var like = data['like']
+                        $(selector).children('sup').text(dislike)
+                        $(selector).prev().children('sup').text(like)
+                    },
+                    error: function(data){
+                        console.log("error")
+                    }
+                });
+            }); 
+            $(".commentpost") .submit(function(e){
+                e.preventDefault()
+                var pk = $(this).children("[name=pk]").val()
+                var comment = $(this).children("[name=comment]").val()
+                pk = parseInt(pk)
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'postcomment' %}",
+                    data: {
+                        "pk": pk,
+                        "comment": comment,
+                    },
+                    headers :{
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    
+                    success: function(data){
+                        console.log()
+                        $("[name=comment]").val("")
+                        var comments = data['comments']
+                        var selector = ".commentcount"+"."+pk
+                        var selector2 = "#comments"+pk
+                        $(selector).children('sup').text(comments)
+                        var comment = `
+                            <div class="mt-3 row mx-0 ">
+                                <div class="col-2 mt-2">
+                                    <img style="border-radius: 50%;" height="40" width="40" src="${data['your_comment']['profile_image']}" alt="not found">
+                                </div>
+                                <div class="comment-div position-relative col mt-2" style="border: 1px solid darkgrey;">
+                                    <span> <b>${data["your_comment"]['user_name']}</b> </span> <span  style="color:#999; font-size:14px;"> ${data['your_comment']['time']} </span> 
+                                    <span style="color:#999; font-size:14px;">ago</span>
+                                    <p style="color:#999; font-size:14px;" class="m-0">
+                                    ${data['your_comment']['comment']}
+                                    </p>
+                                    <a class="show" >
+                                        Reply
+                                    </a>
+                                </div>
+                            </div>
+                            `
+                        $(selector2).append(comment)
+                    },
+
+                    error:function(data){
+                        console.log(data)
+                    },
+
+                });
+            });
+            $(".replycomment").submit(function(e){
+                e.preventDefault()
+                var pk = $(this).children("[name=pk]").val()
+                var reply = $(this).children("[name=reply]").val()
+                pk = parseInt(pk)
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'replycomment' %}",
+                    data: {
+                        "pk": pk,
+                        "reply": reply,
+                    },
+                    headers :{
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    
+                    success: function(data){
+                        $("[name=reply]").val("")
+                        var selector = "#"+pk             
+                        var reply = `
+                             <div class="col-2 mt-2">
+                            <img style="border-radius: 50%;" height="40" width="40" src="{% static 'imges/LinkedIn-Profile-Picture-Example-Madeline-Mann.jpeg' %}" alt="">
+                            </div>
+                             <div class="comment-div position-relative col-10 mt-2" style="border: 1px solid darkgrey;">
+                            <span><b> ${data['user_reply']['user_name']}</b> </span> <span style="color:#999; font-size:14px" > ${data['user_reply']['time']} </span> <i class="bi bi-reply-fill"></i>
+                            <p style="color:#999; font-size:14px" class="mt-2">
+                                ${data['user_reply']['reply']}
+                            </p>
+                            </div>`
+                        $(selector).children().append(reply)
+                    },
+
+                    error: function(data){
+                        console.log(data)                        
+                    },
+                });
+            });
+
+            $(".reply").hide()
+            $(".show").on('click', function(){
+                $(this).parent().siblings().show()
+            });           
+        });
+    </script>
+{% endblock content %}
