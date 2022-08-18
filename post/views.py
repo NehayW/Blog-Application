@@ -48,7 +48,8 @@ class LikePost(View):
                 )
                 try:
                     if request.user != blog.user:
-                        device = FCMDevice.objects.filter(user=blog.user, active=True).last()
+                        device = FCMDevice.objects.filter(user=blog.user, 
+                                                          active=True).last()
                         device.send_message(message_obj)
                     else:
                         pass
@@ -88,7 +89,8 @@ class DislikePost(View):
                 )
                 try:
                     if request.user != blog.user:
-                        device = FCMDevice.objects.filter(user=blog.user, active=True).last()
+                        device = FCMDevice.objects.filter(user=blog.user, 
+                                                          active=True).last()
                         device.send_message(message_obj)
                     else:
                         pass
@@ -178,10 +180,11 @@ class PostComment(View):
             )
             try:
                 if request.user != post.user:
-                    device = FCMDevice.objects.filter(user=post.user, active=True).last()
+                    device = FCMDevice.objects.filter(user=post.user, 
+                                                      active=True).last()
                     device.send_message(message_obj)
                 else:
-                    passs
+                    pass
             except:
                 pass
             your_comment = {}
@@ -221,7 +224,8 @@ class ReplyCommentView(View):
             )
             try:
                 if request.user != comment.user:
-                    device = FCMDevice.objects.filter(user=comment.user, active=True).last()
+                    device = FCMDevice.objects.filter(user=comment.user, 
+                                                      active=True).last()
                     device.send_message(message_obj)
                 else:
                     pass

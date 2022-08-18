@@ -8,7 +8,8 @@ class ChatRoom(models.Model):
 class Message(models.Model):
     room_name = models.ForeignKey(ChatRoom, on_delete = models.CASCADE, 
                                   related_name="message")
-    auther = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')        
+    auther = models.ForeignKey(User, on_delete=models.CASCADE, 
+                               related_name='sender')        
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)

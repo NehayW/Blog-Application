@@ -57,7 +57,8 @@ class ChatConsumer(WebsocketConsumer):
         )
         sender=User.objects.get(id=text_data_json['sender'])
         if message.strip() != "":
-            message=Message.objects.create(room_name=room, auther=sender, message=message)
+            message=Message.objects.create(room_name=room, auther=sender, 
+                                           message=message)
             message.save()
 
     # Receive message from room group

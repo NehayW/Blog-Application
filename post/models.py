@@ -3,7 +3,8 @@ from account.models import User
 # Create your models here.
 
 class PostModel(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, 
+                             related_name="user")
     description = models.TextField()
     post_image = models.ImageField(upload_to='media/image/post', null=True,
                                     blank=True)
