@@ -1,14 +1,33 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+	<title>Blog App</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	<style type="text/css">
+	</style>
 </head>
 <body>
-    <div class="">
-        hello here is your otp {{otp}}
-    </div>
+ <center>
+    	<div style="padding: 30px;background: #f3f3f3;">
+	        <div class="main_div" style="background-color: #ffffff;max-width: 600px;
+    	height: 400px;
+    	border-radius: 8px;
+    	box-shadow: 0 0 4px #ccbaba;">
+	        	<div class="upper_div" style="height: 160px;
+    				border-radius: 8px 8px 0 0px;">
+		            <img class="img-fluid" style="margin-top: 18px;" src="{{domain}}{% static 'imges/logo.png' %}" height="100" width="140" alt="image is not loaded" />
+		            
+	            </div>
+	         
+	               <span style="color: black; font-weight: bold; ">Hi {{user}},</span><p style="margin-top: 10px; font-size:17px;"> Your 6 digit OTP is <i>{{otp}}</i></p>
+      </div>
+        </div>
+    </center>
 </body>
 </html>

@@ -21,13 +21,6 @@ import post
 from django.conf import settings
 from django.conf.urls.static import static
 
-# from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
-# from rest_framework.routers import DefaultRouter
-
-# router = DefaultRouter()
-# router.register('devices', FCMDeviceAuthorizedViewSet)
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
