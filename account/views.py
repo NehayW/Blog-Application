@@ -17,6 +17,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.hashers import make_password
 from fcm_django.models import FCMDevice
 from chat.models import ChatRoom
+from core.messages import Message
 # Create your views here.
 
 
@@ -40,9 +41,7 @@ class Registration(View):
             )
             mail.attach_alternative(message, 'text/html')
             mail.send()
-            # form.save()
-            return JsonResponse({"message": "OTP has been sent"+
-                                 "please check mail",
+            return JsonResponse({"message": Message.OTP_SEND,
                                  "key": otp['key']})
         else:
             return JsonResponse({"erros": register.errors}, status=400)
@@ -51,39 +50,20 @@ class Registration(View):
 class VerifyOtp(View):
     
     def post(self, request):
-        # import pdb; pdb.set_trace()
         register = SignupForm(data=request.POST, files=request.FILES)
-        # form = request.POST['data1']
-        # print(form)
-        # if form.is_valid():
         data = request.POST
         otp = data['otp']
         key = data['key']
-        # register = SignupForm(request.POST['data1'])
-        
-            # data = (request.POST['data'])
-            # form = (request.POST['form'])
-            # print(form)
-            # print("#######", data)
-            # if form.is_valid():
-            #     print("good to go")
-            # print(request.POST['form'])
-            # form = SignupForm(request.POST)
         totp = pyotp.TOTP(key, interval=360)
         if totp.verify(otp):
             if register.is_valid():
                 register.save()
-                
-                # messages.add_message(request, messages.SUCCESS,
-                #                     "registrations has been done")
-                return JsonResponse({"messages":"registration has been done"})
+                return JsonResponse({"messages":Message.REGISTRATION_DONE})
             else:
-                return JsonResponse({"messages":"registration has been failed "},
+                return JsonResponse({"messages":Message.REGISTRATION_FAILED},
                                      status=404)
         else:
-            # messages.add_message(request, messages.ERROR,
-            #                         "OTP is Not valid try again ")
-            return JsonResponse({"messages":"OTP is Not valid try again"}, 
+            return JsonResponse({"messages":Message.OTP_NOT_VALID}, 
                                  status=404)
 
 class LoginUser(View):
@@ -110,16 +90,13 @@ class LoginUser(View):
 class LogOut(View):
     
     def get(self, request):
-        if request.user.is_authenticated:
-            try:
-                device = FCMDevice.objects.filter(user=request.user.id).last()
-                device.delete()
-            except:
-                pass
-            logout(request)
-            return redirect("/")
-        else:
-            return redirect("/")
+        try:
+            device = FCMDevice.objects.filter(user=request.user.id).last()
+            device.delete()
+        except:
+            pass
+        logout(request)
+        return redirect("/")
 
 
 class ForgetPassword(View):
@@ -142,7 +119,7 @@ class ForgetPassword(View):
             
             messages.add_message(request, 
                                  messages.SUCCESS, 
-                                 "OTP has been sent to your mail")
+                                 Message.OTP_SEND)
             
             return render(request, "create_password.html", {"key":otp["key"],
                           "email":email})
@@ -164,76 +141,63 @@ class CreatePassword(View):
                 user.password = upass
                 user.save()
                 messages.add_message(request, messages.SUCCESS, 
-                                    "Password has been created")
+                                     Message.CREATED_PASSWORD)
                 return redirect('login')
             else:
                 messages.add_message(request, 
                                     messages.ERROR, 
-                                    "Password shoud contain a num and a char")
+                                    Message.PASS_NUM_CHAR)
                 return render(request, "create_password.html")
         else:
-            messages.add_message(request, messages.ERROR, "Invalid OTP")
+            messages.add_message(request, messages.ERROR, Message.OTP_INVALID)
             return render(request, "create_password.html")
 
 
 class ChangePassword(View):
     
     def get(self, request):
-        if request.user.is_authenticated:
-            return render(request, "change_password.html")
-        else:
-            return redirect('login')
-    
+        return render(request, "change_password.html")
+
     def post(self, request):
-        if request.user.is_authenticated:
-            data = request.POST
-            old_pass = data['old-password']
-            user = User.objects.filter(id=request.user.id).first()
-            if user.check_password(old_pass):
-                upass = data['password']
-                if upass.isalnum():
-                    upass = make_password(upass)
-                    user.password = upass
-                    user.save()
-                    messages.add_message(request, messages.SUCCESS, 
-                                        "Password has been Changed")
-                    return redirect('/')
-                else:
-                    messages.add_message(request, 
-                                         messages.ERROR, 
-                                         "Password shoud contain a"+ 
-                                         "num and a char") 
-                    return render(request, "change_password.html")
+        data = request.POST
+        old_pass = data['old-password']
+        user = User.objects.filter(id=request.user.id).first()
+        if user.check_password(old_pass):
+            upass = data['password']
+            if upass.isalnum():
+                upass = make_password(upass)
+                user.password = upass
+                user.save()
+                messages.add_message(request, messages.SUCCESS, 
+                                    Message.CHANGE_PASS)
+                return redirect('/')
             else:
-                messages.add_message(request, messages.ERROR, 
-                                    "Old password did't match")
+                messages.add_message(request, 
+                                        messages.ERROR, 
+                                        Message.PASS_NUM_CHAR) 
+                return render(request, "change_password.html")
         else:
-            return redirect("login")
+            messages.add_message(request, messages.ERROR, 
+                                Message.OLD_PASS_NOT_MATCH)
 
 
 class UpdateProfile(View):
     
     def get(self, request):
-        if request.user.is_authenticated:
-            return render(request, "update_profile.html")
-        else:
-            return redirect("login")
-    
+        return render(request, "update_profile.html")
+
     def post(self, request):
-        if request.user.is_authenticated:
-            user = User.objects.filter(id=request.user.id).first()
-            form = UpdateProfileForm(request.POST, 
-                                    request.FILES, instance=user)
-            if form.is_valid():
-                form.save()
-                messages.add_message(request, messages.SUCCESS, 
-                                    "Profile Updated")
-                return redirect('/')
-            else:
-                return render(request, 'update_profile.html', 
-                             {"form":form})
+        user = User.objects.filter(id=request.user.id).first()
+        form = UpdateProfileForm(request.POST, 
+                                request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 
+                                "Profile Updated")
+            return redirect('/')
         else:
-            return redirect('login')
+            return render(request, 'update_profile.html', 
+                            {"form":form})
 
 
 class FollowingFollowers(View):
@@ -243,13 +207,13 @@ class FollowingFollowers(View):
             user = User.objects.filter(id=pk).first()
             if user == request.user:
                 messages.add_message(request, messages.ERROR, 
-                                    "You can not follow your id")
+                                    Message.FOLLOW_YOUR_ID)
                 return redirect(f"/user-info/{pk}")
             if user.follower.filter(id=request.user.id):
                 user.follower.remove(request.user)
                 request.user.following.remove(user)
                 messages.add_message(request, messages.SUCCESS,
-                                    "You unfollow this user")
+                                    Message.UNFOLLOW)
                 return redirect(f"/user-info/{pk}")
             else:
                 request.user.following.add(user)
@@ -258,7 +222,7 @@ class FollowingFollowers(View):
                     room = ChatRoom.objects.create()
                     room.room.add(user,request.user)
                 messages.add_message(request, messages.SUCCESS,
-                                     "You follow this user")
+                                     Message.FOLLOW)
                 return redirect(f"/user-info/{pk}")
 
 
@@ -268,29 +232,14 @@ class UserInfo(View):
         user = User.objects.filter(id=pk).first()
         return render(request, 'userinfo.html', {"user": user})
         
-class MyFollowers(View):
-    
-    def get(self, request):
-        if request.user.is_authenticated:
-            user = User.objects.filter(id=request.user.id).first()
-            return render(request, "followers.html", {"user": user})
-
-class MyFollowing(View):
-    
-    def get(self, request):
-        if request.user.is_authenticated:
-            user = User.objects.filter(id=request.user.id).first()
-            return render(request, "following.html", {"user": user})
-
 
 class CreateUserDevice(View):
     
     def post(self, request):
-        if request.user.is_authenticated:
-            data = request.POST
-            if FCMDevice.objects.filter(user=request.user).exists():
-                return JsonResponse({"message": "Device Already Created"})
-            FCMDevice.objects.create(registration_id=data['registration_id'], 
-                                     user=request.user, type=data['type'])
-            return JsonResponse({"message": "Device Created"})
-        return JsonResponse({"message": "Device Not created"})
+        data = request.POST
+        if FCMDevice.objects.filter(user=request.user).exists():
+            return JsonResponse({"message": Message.IS_DEVICE})
+        FCMDevice.objects.create(registration_id=data['registration_id'], 
+                                    user=request.user, type=data['type'])
+        return JsonResponse({"message": Message.CREATED_DEVICE})
+

@@ -206,37 +206,11 @@
 
         $("#otp").submit(function (e) {
             e.preventDefault();
-            // var key = $("#key").val();
-            // var user_otp = $("#user_otp").val();
-            // var first_name = $("[name=first_name]").val();
-            // var last_name = $("[name=last_name]").val();
-            // var email = $("[name=email]").val();
-            // var image = $("[name=profile_image]").val();
-            // var password1 = $("[name=password1]").val();
             var serializedata = $('#registration-form')[0];
             var formdata = new FormData(serializedata);
-            // formdata.append('fileSize', sizeConverter($('#profile_image')[0].files[0].size/1024));
-            // serializedata.push({name:'profile_image', value: $('#profile_image')[0].files[0]});
-            // formdata = new FormData($('#registration-form').get(0));
             formdata.append('profile_image', $('#profile_image')[0].files[0]); 
             formdata.append('key', $("#key").val())
             formdata.append('otp', $("#user_otp").val())
-            // formdata.append('first_name', $("[name=first_name]").val())
-            // formdata.append('last_name', $("[name=last_name]").val())
-            // formdata.append('email', $("[name=email]").val())
-            // formdata.append('password', $("[name=password1]").val())               
-            // var email = $("[name=email]").val()
-            // var first_name = $("[name=first_name]").val()
-            // var last_name = $("[name=last_name]").val()
-            // var image = $("[name=image]").val()
-            // var password1 = $("[name=password1]").val()
-            // var password2 = $("[name=password2]").val()
-            // serializedata.append("key", key)
-            // serializedata.push({"key": key});
-            // console.log(formdata)
-            // serializedata.push({name: 'key', value: key})
-            // serializedata.push({name:"otp", value: user_otp})
-            // console.log(serializedata)
             console.log(formdata)
             $.ajax({
                 type: 'POST',
@@ -244,7 +218,6 @@
                 data: formdata,
                 contentType: false,
                 processData:false,
-                // enctype: 'multipart/form-data',
                 headers: {
                     'X-CSRFToken': '{{ csrf_token }}'
                 },
