@@ -10,8 +10,7 @@ from account.models import UserVisit
 class HomePage(View):
     def get(self, request):
         if (request.user.is_authenticated and 
-            not UserVisit.objects.filter(user=request.user.id).exists() 
-            and request.user.is_birthday):
+            not UserVisit.objects.filter(user=request.user.id).exists()):
             user = User.objects.filter(id=request.user.id).first()
             UserVisit.objects.create(url=request.path , user=user)
             return render(request, 'happy.html')

@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'fcm_django',
     'django.contrib.sitemaps',
     'channels',
-    # 'channels_redis',
 
 ]
 
@@ -81,19 +80,6 @@ TEMPLATES = [
 ASGI_APPLICATION = 'blog.asgi.application'
 WSGI_APPLICATION = 'blog.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -140,36 +126,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 FIREBASE_APP = initialize_app()
 
 FCM_DJANGO_SETTINGS = {
-    # default: _('FCM Django')
-    # "FCM_SERVER_KEY": "BEbumNT3KimCsAkTm3myzo7aF-_R9FFyZuhc9BEPPFpJR1tEm7NETVs1P147lrgDxaeYsj_CxkmtawwlGH_lZLo",
+   
     "APP_VERBOSE_NAME": "Basic Blog",
-     # true if you want to have only one active device per registered user at a time
-     # default: False
+
     "ONE_DEVICE_PER_USER": False,
-     # devices to which notifications cannot be sent,
-     # are deleted upon receiving error response from FCM
-     # default: False
+
     "DELETE_INACTIVE_DEVICES": True,
-    # Transform create of an existing Device (based on registration id) into
-                # an update. See the section
-    # "Update of device with duplicate registration ID" for more details.
+
     "UPDATE_ON_DUPLICATE_REG_ID": False,
 }
+
+LOGIN_URL='login'
+LOGIN_REDIRECT_URL='/'
 
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/wangoes109/Downloads/basic-blog-ea7d4-firebase-adminsdk-592q1-75cf305ef2.json"
 
-
-# GOOGLE_APPLICATION_CREDENTIALS = "/home/wangoes109/Downloads/basic-blog-ea7d4-firebase-adminsdk-592q1-75cf305ef2.json"
-
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             "hosts": [('localhost', 6379)],
-#         },
-#     },
-# }
 
 CHANNEL_LAYERS = {
     "default": {

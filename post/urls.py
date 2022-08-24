@@ -3,17 +3,17 @@ from . import views
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-    path('postblog/', views.PostBlog.as_view(), 
+    path('postblog/', login_required(views.PostBlog.as_view()), 
                                                      name="blogpost"),
-    path('likepost/<int:pk>/', views.LikePost.as_view(),
+    path('likepost/<int:pk>/',login_required(views.LikePost.as_view()),
                                                       name="likepost"),
-    path('dislikepost/<int:pk>/', views.DislikePost.as_view(),
+    path('dislikepost/<int:pk>/', login_required(views.DislikePost.as_view()),
                                                     name="dislikepost"),
-    path('my-post/', views.MyPost.as_view(), name="mypost"),
-    # path('update-post/<int:pk>', views.UpdatePost.as_view(), name="update-post"),
+    path('my-post/', login_required(views.MyPost.as_view()), name="mypost"),
     path('delete-post/<int:pk>', views.DeletePost.as_view(), 
                                                     name="delete-post"),
-    path('post-comment/', views.PostComment.as_view(), name="postcomment"),
-    path('reply-comment/', views.ReplyCommentView.as_view(), 
+    path('post-comment/', login_required(views.PostComment.as_view()), 
+                                         name="postcomment"),
+    path('reply-comment/', login_required(views.ReplyCommentView.as_view()), 
                                                     name="replycomment")
 ]

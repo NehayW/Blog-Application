@@ -836,30 +836,6 @@ $("#status-options ul li").click(function() {
 	$("#status-options").removeClass("active");
 });
 
-// function newMessage() {
-// 	message = $(".message-input input").val();
-//   console.log("hello")
-// 	if($.trim(message) == '') {
-// 		return false;
-// 	}
-// 	$('<li class="sent"><img src="{{ request.user.profile_image.url }}" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
-// 	$('.message-input input').val(null);
-// 	$('.contact.active .preview').html('<span>You: </span>' + message);
-// 	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
-// };
-
-
-// $('.submit').click(function() {
-//   newMessage();
-// });
-
-// $(window).on('keydown', function(e) {
-//   if (e.which == 13) {
-//     newMessage();
-//     return false;
-//   }
-// });
-//# sourceURL=pen.js
 </script>
 
 <script>
@@ -907,11 +883,6 @@ $(".contact").click(function(){
               console.error('Chat socket closed unexpectedly');
           };
 
-//   document.querySelector('#chat-message-input').focus();
-//   document.querySelector('#chat-message-input').onkeyup =function(e) {
-//   if (e.keyCode === 13) {// enter, returndocument.querySelector('#chat-message-submit').click();
-//               }
-//           };
 
 $(window).on('keydown', function(e) {
   if (e.which == 13) {
