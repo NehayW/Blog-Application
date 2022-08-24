@@ -22,8 +22,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     following = models.ManyToManyField("self", related_name="followings", 
                                         blank=True, symmetrical=False,
                                         )
-    is_birthday = models.BooleanField(default=False)
-
+    # is_birthday = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
     
     REQUIRED_FIELDS = []

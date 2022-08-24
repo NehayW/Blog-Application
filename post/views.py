@@ -159,8 +159,8 @@ class PostComment(View):
         comments = PostModel.objects.filter(id=data['pk']).first()
         comments = comments.post.all().count()
         
-        return JsonResponse({"message":ms.COMMENT, 
-                                "comments": comments, 
+        return JsonResponse({"message":ms.COMMENT,
+                                "comments": comments,
                                 "your_comment":your_comment})
 
 class ReplyCommentView(View):
